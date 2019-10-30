@@ -125,8 +125,11 @@ export class AppComponent implements OnDestroy {
     }));
 
     this.store
-      .pipe(untilDestroyed(this))
+      // .pipe(untilDestroyed(this))
       .subscribe(data => {
+        console.group('store')
+        console.log(data.windows)
+        console.groupEnd()
         this.windows = data.windows;
         this.windowIds = Object.keys(data.windows);
         this.showDonationAlert = data.donation.showAlert;
@@ -146,7 +149,7 @@ export class AppComponent implements OnDestroy {
         }
 
         this.activeWindowId = data.windowsMeta.activeWindowId;
-        debug.log(data.windows, this.windowIds);
+        // debug.log(data.windows, this.windowIds);
 
         // If the active window has not been set, default it
         if (this.windowIds.length && (!this.activeWindowId || !data.windows[this.activeWindowId])) {
@@ -251,7 +254,8 @@ export class AppComponent implements OnDestroy {
     this.store.dispatch(new windowsMetaActions.RepositionWindowAction({ currentPosition, newPosition }));
   }
 
-  reopenClosedWindow() {
+  reopenClosedWindow(data) {
+    console.log(data)
     this.store.dispatch(new windowActions.ReopenClosedWindowAction());
   }
 

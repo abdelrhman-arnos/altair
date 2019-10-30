@@ -58,10 +58,14 @@ export class WindowsEffects {
     .pipe(
       ofType(windowActions.REOPEN_CLOSED_WINDOW),
       withLatestFrom(this.store, (action: windowActions.ReopenClosedWindowAction, state) => {
+           console.group('state');
+        console.log(state)
+        console.groupEnd();
         return { closedWindows: state.local.closedWindows, windows: state.windows, windowIds: state.windowsMeta.windowIds, action };
       }),
       switchMap(data => {
         const lastClosedWindow = data.closedWindows.pop();
+       
         if (!lastClosedWindow || !lastClosedWindow.windowId) {
           return observableEmpty();
         }
@@ -75,6 +79,10 @@ export class WindowsEffects {
         windows[lastClosedWindowId] = lastClosedWindow;
         this.store.dispatch(new windowActions.SetWindowsAction(Object.values(windows)));
         const newWindowIds = [ ...data.windowIds, lastClosedWindowId ];
+        // console.group('effect');
+        // console.log(windows)
+        // console.groupEnd();
+        this.store.dispatch(new windowActions.ReopenClosedWindowAction(Object.values(windows)));
         return observableOf(new windowsMetaActions.SetWindowIdsAction({ ids: newWindowIds }));
       }),
       tap(() => {

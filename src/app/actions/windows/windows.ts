@@ -14,8 +14,11 @@ export const REOPEN_CLOSED_WINDOW = 'REOPEN_CLOSED_WINDOW';
 
 export class AddWindowAction implements Action {
   readonly type = ADD_WINDOW;
-
-  constructor(public payload: any) {}
+  constructor(public payload: any) {
+  if(){
+    
+  }
+  }
 }
 export class SetWindowsAction implements Action {
   readonly type = SET_WINDOWS;
